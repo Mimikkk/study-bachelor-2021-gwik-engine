@@ -1,7 +1,8 @@
 ﻿using System;
 using Silk.NET.OpenGL;
+using Sokoban.utilities;
 
-namespace GWiK_Sokoban.engine.renderer
+namespace Sokoban.engine.renderer
 {
     public class Shader : IDisposable
     {
@@ -14,12 +15,12 @@ namespace GWiK_Sokoban.engine.renderer
         {
             Type = type;
             Name = name;
-            Handle = Game.Gl.CreateShader(Type);
+            Handle = Api.Gl.CreateShader(Type);
 
-            Game.Gl.ShaderSource(Handle, Source);
-            Game.Gl.CompileShader(Handle);
+            Api.Gl.ShaderSource(Handle, Source);
+            Api.Gl.CompileShader(Handle);
 
-            var infoLog = Game.Gl.GetShaderInfoLog(Handle);
+            var infoLog = Api.Gl.GetShaderInfoLog(Handle);
             if (!string.IsNullOrWhiteSpace(infoLog))
                 throw new Exception($"Error compiling shader of type {type}, failed with error {infoLog}");
         }
@@ -48,7 +49,7 @@ namespace GWiK_Sokoban.engine.renderer
 
         public void Dispose()
         {
-            Game.Gl.DeleteShader(Handle);
+            Api.Gl.DeleteShader(Handle);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace GWiK_Sokoban.engine
+namespace Sokoban.utilities
 {
     public class Path
     {

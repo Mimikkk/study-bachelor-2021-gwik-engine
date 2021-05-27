@@ -1,83 +1,54 @@
 ﻿#nullable enable
-using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using GWiK_Sokoban.engine.interfaces;
-using GWiK_Sokoban.engine.renderer;
-using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
-using SixLabors.ImageSharp;
+using Sokoban.engine.renderer;
 
-namespace GWiK_Sokoban.engine
+namespace Sokoban.engine
 {
     public class GameWindow
     {
-        public void Run()
-        {
-            _window.Run();
-        }
-        public void Close()
-        {
-            _window.Close();
-        }
+        public void Run() => _window.Run();
+        public void Close() => _window.Close();
+        public float AspectRatio => (float) _window.Size.X / _window.Size.Y;
 
-        private readonly IWindow _window;
-        private static DateTime _startTime;
-        public float AspectRatio
-        {
-            get => (float) _window.Size.X / _window.Size.Y;
-        }
 
-        public GameWindow(Func<WindowOptions>? configuration = null)
+        public GameWindow()
         {
-            _window = Window.Create((configuration ?? DefaultConfiguration)());
-            _startTime = DateTime.UtcNow;
-
+            _window = Window.Create(OptionConfiguration());
             _window.Load += OnLoad;
             _window.Update += OnUpdate;
             _window.Render += OnRender;
-            _window.Closing += OnClose;
         }
 
+        private readonly IWindow _window;
         private void OnLoad()
         {
-            _window.Center(_window.Monitor);
-            Game.InitializeOpenGl(GL.GetApi(_window));
-            Game.MaybeInitializeInputContext(_window.CreateInput());
-            Game.InitializeCamera();
-            Game.InitializeGameObjects();
-
-
-            Game.Updateables.Add(Game.Camera);
+            _window.Center();
+            Api.Initialize(GL.GetApi(_window), _window.CreateInput());
+            Game.Initialize();
         }
-
         private static void OnUpdate(double deltaTime)
         {
             Game.Updateables.ForEach(u => u.Update(deltaTime));
         }
-
         private static void OnRender(double deltaTime)
         {
             Renderer.Clear();
-            Game.Renderables.ForEach(go => go.MaybeRender());
+            Game.Renderables.ForEach(go => go.Render());
         }
 
-        private static void OnClose()
-        {
-        }
-
-        private static Func<WindowOptions> DefaultConfiguration { get; } = () =>
+        private static WindowOptions OptionConfiguration()
         {
             var options = WindowOptions.Default;
             options.Size = new Vector2D<int>(800, 700);
-            options.Title = "OpenGL: Sokoban";
+            options.Title = "OpenGL: AA";
             options.PreferredDepthBufferBits = 24;
             options.PreferredStencilBufferBits = 24;
+            options.API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.Default,
+                new APIVersion(4, 5));
             return options;
-        };
+        }
     }
 }

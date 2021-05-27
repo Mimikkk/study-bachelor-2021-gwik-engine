@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace GWiK_Sokoban.engine
+namespace Sokoban.utilities
 {
     public static class MathHelper
     {

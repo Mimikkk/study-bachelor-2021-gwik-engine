@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using Silk.NET.Input;
+using Sokoban.engine.renderer;
+using Sokoban.primitives;
+using Sokoban.utilities;
+using Path = Sokoban.utilities.Path;
 
-namespace GWiK_Sokoban.engine.objects
+namespace Sokoban.engine.objects
 {
     internal static class ObjectLoader
     {

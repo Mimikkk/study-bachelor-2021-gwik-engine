@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace GWiK_Sokoban.engine.objects
+namespace Sokoban.engine.renderer
 {
     internal class Vertex
     {

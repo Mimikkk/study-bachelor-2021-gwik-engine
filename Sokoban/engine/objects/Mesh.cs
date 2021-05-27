@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GWiK_Sokoban.engine.interfaces;
-using GWiK_Sokoban.engine.renderer;
+using Sokoban.engine.renderer;
 
-namespace GWiK_Sokoban.engine.objects
+namespace Sokoban.engine.objects
 {
     internal class Mesh : IHasInfo
     {

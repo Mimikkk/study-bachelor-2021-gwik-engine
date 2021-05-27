@@ -1,6 +1,6 @@
 ﻿using Silk.NET.OpenGL;
 
-namespace GWiK_Sokoban.engine.renderer
+namespace Sokoban.engine.renderer
 {
     public class VertexBuffer : BufferObject<float>
     {

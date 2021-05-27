@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Silk.NET.OpenGL;
+using Shader = Sokoban.engine.renderer.Shader;
 
-namespace GWiK_Sokoban.engine.renderer
+namespace Sokoban.engine.renderer
 {
     public class ShaderProgram : IDisposable
     {
@@ -12,7 +13,7 @@ namespace GWiK_Sokoban.engine.renderer
         public Action Configuration;
         public ShaderProgram(Action configuration = null, params Shader[] shaders)
         {
-            Handle = Game.Gl.CreateProgram();
+            Handle = Api.Gl.CreateProgram();
             AttachShaders(shaders);
             Configuration = configuration;
             Link();
@@ -20,62 +21,62 @@ namespace GWiK_Sokoban.engine.renderer
 
         public void Link()
         {
-            Game.Gl.LinkProgram(Handle);
+            Api.Gl.LinkProgram(Handle);
             VerifyLinkStatus();
         }
         private void VerifyLinkStatus()
         {
-            Game.Gl.GetProgram(Handle, GLEnum.LinkStatus, out var status);
+            Api.Gl.GetProgram(Handle, GLEnum.LinkStatus, out var status);
             if (status == 0)
-                throw new Exception($"Program failed to link with error: {Game.Gl.GetProgramInfoLog(Handle)}");
+                throw new Exception($"Program failed to link with error: {Api.Gl.GetProgramInfoLog(Handle)}");
         }
 
         public void Bind()
         {
-            Game.Gl.UseProgram(Handle);
+            Api.Gl.UseProgram(Handle);
         }
 
         public unsafe void SetUniform(string name, int value)
         {
-            Game.Gl.Uniform1(UniformLocation(name), value);
+            Api.Gl.Uniform1(UniformLocation(name), value);
         }
         public unsafe void SetUniform(string name, float value)
         {
-            Game.Gl.Uniform1(UniformLocation(name), value);
+            Api.Gl.Uniform1(UniformLocation(name), value);
         }
         public unsafe void SetUniform(string name, double value)
         {
-            Game.Gl.Uniform1(UniformLocation(name), value);
+            Api.Gl.Uniform1(UniformLocation(name), value);
         }
 
         public unsafe void SetUniform(string name, Vector2 value)
         {
-            Game.Gl.Uniform2(UniformLocation(name), value);
+            Api.Gl.Uniform2(UniformLocation(name), value);
         }
         public unsafe void SetUniform(string name, Vector3 value)
         {
-            Game.Gl.Uniform3(UniformLocation(name), value);
+            Api.Gl.Uniform3(UniformLocation(name), value);
         }
         public unsafe void SetUniform(string name, Vector4 value)
         {
-            Game.Gl.Uniform4(UniformLocation(name), value);
+            Api.Gl.Uniform4(UniformLocation(name), value);
         }
 
         public unsafe void SetUniform(string name, Matrix4x4 value, bool transpose = false)
         {
-            Game.Gl.UniformMatrix4(UniformLocation(name), 1, transpose, (float*) &value);
+            Api.Gl.UniformMatrix4(UniformLocation(name), 1, transpose, (float*) &value);
         }
 
 
         private int UniformLocation(string name)
         {
-            var location = Game.Gl.GetUniformLocation(Handle, name);
+            var location = Api.Gl.GetUniformLocation(Handle, name);
             if (location == -1) throw new Exception($"{name} uniform not found on shader.");
             return location;
         }
         private int AttributeLocation(string name)
         {
-            var location = Game.Gl.GetAttribLocation(Handle, name);
+            var location = Api.Gl.GetAttribLocation(Handle, name);
             if (location == -1) throw new Exception($"{name} attribute not found on shader.");
             return location;
         }
@@ -88,7 +89,7 @@ namespace GWiK_Sokoban.engine.renderer
         public void AttachShader(Shader shader)
         {
             _shaders.Add(shader);
-            Game.Gl.AttachShader(Handle, shader.Handle);
+            Api.Gl.AttachShader(Handle, shader.Handle);
         }
 
         public void DetachShaders()
@@ -98,12 +99,12 @@ namespace GWiK_Sokoban.engine.renderer
         private void DetachShader(Shader shader)
         {
             _shaders.Remove(shader);
-            Game.Gl.DetachShader(Handle, shader.Handle);
+            Api.Gl.DetachShader(Handle, shader.Handle);
         }
 
         public void Dispose()
         {
-            Game.Gl.DeleteProgram(Handle);
+            Api.Gl.DeleteProgram(Handle);
         }
         public static readonly ShaderProgram Default = new
         (

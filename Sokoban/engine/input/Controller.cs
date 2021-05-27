@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Numerics;
 using Silk.NET.Input;
 
-namespace GWiK_Sokoban.engine.input
+namespace Sokoban.engine.input
 {
     internal class Controller
     {
-        private readonly Dictionary<Key, Action<double>> KeyboardCallbacks = new();
-        private readonly Dictionary<MouseButton, Action<double>> MouseCallbacks = new();
+        private Dictionary<Key, Action<double>> KeyboardCallbacks { get; } = new();
+        private Dictionary<MouseButton, Action<double>> MouseCallbacks { get; } = new();
 
         public void Update(double deltaTime)
         {
             foreach (var (key, callback) in KeyboardCallbacks)
             {
-                if (Game.Keyboard.IsKeyPressed(key))
+                if (Api.Keyboard.IsKeyPressed(key))
                     callback(deltaTime);
             }
             foreach (var (button, callback) in MouseCallbacks)
             {
-                if (Game.Mouse.IsButtonPressed(button))
+                if (Api.Mouse.IsButtonPressed(button))
                     callback(deltaTime);
             }
         }
@@ -34,7 +33,7 @@ namespace GWiK_Sokoban.engine.input
         {
             foreach (var (key, callback) in callbacks)
             {
-                Game.Keyboard.KeyUp += (_, k, _) =>
+                Api.Keyboard.KeyUp += (_, k, _) =>
                 {
                     if (k == key) callback();
                 };
@@ -44,7 +43,7 @@ namespace GWiK_Sokoban.engine.input
         {
             foreach (var (key, callback) in callbacks)
             {
-                Game.Keyboard.KeyDown += (_, k, _) =>
+                Api.Keyboard.KeyDown += (_, k, _) =>
                 {
                     if (k == key) callback();
                 };
@@ -59,12 +58,12 @@ namespace GWiK_Sokoban.engine.input
         public void AddMouseMoves(params Action<Vector2>[] callbacks)
         {
             foreach (var callback in callbacks)
-                Game.Mouse.MouseMove += (_, position) => callback(position);
+                Api.Mouse.MouseMove += (_, position) => callback(position);
         }
         public void AddMouseScrolls(params Action<ScrollWheel>[] callbacks)
         {
             foreach (var callback in callbacks)
-                Game.Mouse.Scroll += (_, scroll) => callback(scroll);
+                Api.Mouse.Scroll += (_, scroll) => callback(scroll);
         }
     }
 }

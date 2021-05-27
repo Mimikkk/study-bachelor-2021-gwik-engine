@@ -4,8 +4,9 @@ using Silk.NET.OpenGL;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using Sokoban.utilities;
 
-namespace GWiK_Sokoban.engine.objects
+namespace Sokoban.engine.renderer
 {
     internal class Texture : IDisposable
     {
@@ -15,7 +16,7 @@ namespace GWiK_Sokoban.engine.objects
 
         public unsafe Texture(string name)
         {
-            Handle = Game.Gl.GenTexture();
+            Handle = Api.Gl.GenTexture();
             Name = name;
 
             var image = (Image<Rgba32>) Image.Load(Imagepath.ToString());
@@ -30,24 +31,24 @@ namespace GWiK_Sokoban.engine.objects
         private unsafe void Load(void* data, uint width, uint height)
         {
             Bind();
-            Game.Gl.TexImage2D(TextureTarget.Texture2D, 0, (int) InternalFormat.Rgba,
+            Api.Gl.TexImage2D(TextureTarget.Texture2D, 0, (int) InternalFormat.Rgba,
                 width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, data);
-            Game.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) GLEnum.ClampToEdge);
-            Game.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) GLEnum.ClampToEdge);
-            Game.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) GLEnum.Linear);
-            Game.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) GLEnum.Linear);
-            Game.Gl.GenerateMipmap(TextureTarget.Texture2D);
+            Api.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) GLEnum.ClampToEdge);
+            Api.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) GLEnum.ClampToEdge);
+            Api.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) GLEnum.Linear);
+            Api.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) GLEnum.Linear);
+            Api.Gl.GenerateMipmap(TextureTarget.Texture2D);
         }
 
         public void Bind(int textureSlot = 0)
         {
-            Game.Gl.ActiveTexture(TextureUnit.Texture0 + textureSlot);
-            Game.Gl.BindTexture(TextureTarget.Texture2D, Handle);
+            Api.Gl.ActiveTexture(TextureUnit.Texture0 + textureSlot);
+            Api.Gl.BindTexture(TextureTarget.Texture2D, Handle);
         }
 
         public void Dispose()
         {
-            Game.Gl.DeleteTexture(Handle);
+            Api.Gl.DeleteTexture(Handle);
         }
     }
 }

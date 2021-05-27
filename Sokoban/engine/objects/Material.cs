@@ -1,11 +1,8 @@
 ﻿#nullable enable
 using System.Numerics;
-using GWiK_Sokoban.engine.interfaces;
-using GWiK_Sokoban.engine.renderer;
-using Silk.NET.OpenGL;
-using Shader = GWiK_Sokoban.engine.renderer.Shader;
+using Texture = Sokoban.engine.renderer.Texture;
 
-namespace GWiK_Sokoban.engine.objects
+namespace Sokoban.engine.objects
 {
     internal class Material : IHasInfo
     {

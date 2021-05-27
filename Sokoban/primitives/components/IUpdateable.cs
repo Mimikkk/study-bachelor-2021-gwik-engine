@@ -1,4 +1,4 @@
-﻿namespace GWiK_Sokoban.engine.interfaces
+﻿namespace Sokoban.primitives.components
 {
     internal interface IUpdateable
     {

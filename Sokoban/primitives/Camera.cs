@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Numerics;
-using GWiK_Sokoban.engine.input;
-using GWiK_Sokoban.engine.interfaces;
-using GWiK_Sokoban.engine.renderer;
 using Silk.NET.Input;
-using Silk.NET.Maths;
-using Silk.NET.SDL;
+using Sokoban.engine.input;
+using Sokoban.primitives.components;
+using Sokoban.utilities;
 
-namespace GWiK_Sokoban.engine.objects
+namespace Sokoban.primitives
 {
     public class Camera : ITransform, IUpdateable
     {

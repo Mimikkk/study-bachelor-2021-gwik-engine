@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using GWiK_Sokoban.engine.interfaces;
-using GWiK_Sokoban.engine.renderer;
-using Silk.NET.OpenGL;
-using Silk.NET.Vulkan;
-using Shader = GWiK_Sokoban.engine.renderer.Shader;
+using Sokoban.engine.objects;
+using Sokoban.engine.renderer;
+using Sokoban.primitives.components;
 
-namespace GWiK_Sokoban.engine.objects
+namespace Sokoban.primitives
 {
     public class GameObject : IRenderable, ITransform
     {
@@ -37,7 +34,6 @@ namespace GWiK_Sokoban.engine.objects
         }
 
         public bool IsConfigured { get; set; }
-
         public void Render()
         {
             Renderer.Draw(Mesh.Vao, Spo);

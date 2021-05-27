@@ -1,31 +1,39 @@
-﻿using Silk.NET.OpenGL;
+﻿using System.Linq;
+using Silk.NET.OpenGL;
 using Silk.NET.SDL;
+using Sokoban.primitives.components;
 
-namespace GWiK_Sokoban.engine.renderer
+namespace Sokoban.engine.renderer
 {
     public static class Renderer
     {
-        public static void Draw(VertexArrayObject vao, ShaderProgram spo)
+        public static void Render(params IRenderable[] renderables)
+        {
+            foreach (var renderable in renderables.Where(r => r.IsConfigured)) renderable.Render();
+        }
+
+        internal static void Draw(VertexArrayObject vao, ShaderProgram spo)
         {
             vao.Bind();
             spo.Bind();
             spo.Configuration();
-            Game.Gl.DrawArrays(PrimitiveType.Triangles, 0, vao.IndexCount);
+            Api.Gl.DrawArrays(PrimitiveType.Triangles, 0, vao.IndexCount);
         }
 
         public static void Clear()
         {
-            Game.Gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
+            // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
+            Api.Gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
         }
 
         public static void SetDrawMode(PolygonMode mode)
         {
-            Game.Gl.PolygonMode(MaterialFace.FrontAndBack, mode);
+            Api.Gl.PolygonMode(MaterialFace.FrontAndBack, mode);
         }
 
         public static void SetClearColor(Color color)
         {
-            Game.Gl.ClearColor(color.R, color.G, color.B, color.A);
+            Api.Gl.ClearColor(color.R, color.G, color.B, color.A);
         }
     }
 }

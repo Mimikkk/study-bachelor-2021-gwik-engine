@@ -1,7 +1,7 @@
 ﻿using System;
 using Silk.NET.OpenGL;
 
-namespace GWiK_Sokoban.engine.renderer
+namespace Sokoban.engine.renderer
 {
     public class VertexArrayObject : IDisposable
     {
@@ -15,7 +15,7 @@ namespace GWiK_Sokoban.engine.renderer
 
         public VertexArrayObject(VertexBuffer vbo, IndexBuffer ibo)
         {
-            Handle = Game.Gl.GenVertexArray();
+            Handle = Api.Gl.GenVertexArray();
             VertexBufferObject = vbo;
             IndexBufferObject = ibo;
             Bind();
@@ -34,16 +34,16 @@ namespace GWiK_Sokoban.engine.renderer
 
         private unsafe void VertexAttributePointer(LayoutElement element)
         {
-            Game.Gl.VertexAttribPointer(_layoutSize, element.Count, VertexAttribPointerType.Float, false,
+            Api.Gl.VertexAttribPointer(_layoutSize, element.Count, VertexAttribPointerType.Float, false,
                 element.Size * sizeof(float), (void*) (_vertexOffset * sizeof(float)));
-            Game.Gl.EnableVertexAttribArray(_layoutSize);
+            Api.Gl.EnableVertexAttribArray(_layoutSize);
             _vertexOffset += (uint) element.Count;
             _layoutSize += 1;
         }
 
         public void Bind()
         {
-            Game.Gl.BindVertexArray(Handle);
+            Api.Gl.BindVertexArray(Handle);
             VertexBufferObject.Bind();
             IndexBufferObject.Bind();
         }
@@ -52,7 +52,7 @@ namespace GWiK_Sokoban.engine.renderer
         {
             IndexBufferObject.Dispose();
             VertexBufferObject.Dispose();
-            Game.Gl.DeleteVertexArray(Handle);
+            Api.Gl.DeleteVertexArray(Handle);
         }
     }
 
@@ -67,6 +67,5 @@ namespace GWiK_Sokoban.engine.renderer
             Count = count;
             Size = size;
         }
-        
     }
 }

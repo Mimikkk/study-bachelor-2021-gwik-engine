@@ -1,8 +1,7 @@
-﻿using System;
-using GWiK_Sokoban.engine.input;
-using GWiK_Sokoban.engine.interfaces;
+﻿using Sokoban.engine.input;
+using Sokoban.primitives.components;
 
-namespace GWiK_Sokoban.engine.objects
+namespace Sokoban.engine.objects
 {
     internal class Player : IRenderable, IUpdateable
     {
