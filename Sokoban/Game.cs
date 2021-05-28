@@ -6,6 +6,7 @@ using Sokoban.engine.input;
 using Sokoban.engine.objects;
 using Sokoban.primitives;
 using Sokoban.primitives.components;
+// using Sokoban.utilities;
 
 namespace Sokoban
 {
@@ -28,6 +29,8 @@ namespace Sokoban
         }
         private static void InitializeGameObjects()
         {
+            // ObjectLoader.LoadObject("BoxStack");
+
             Renderables.AddRange(ObjectLoader.MaybeLoad("stupid"));
             foreach (var go in Renderables) ((GameObject) go).DefaultInitialization();
         }

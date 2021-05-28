@@ -8,7 +8,7 @@ namespace Sokoban.engine.objects
     {
         public string Name { get; }
 
-        public string Info()
+        public string ShowDetails()
         {
             return $"Mesh '{Name}' Properties:\n"
                    + $"\tIndices: {Vao.IndexCount}\n"

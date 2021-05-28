@@ -11,7 +11,7 @@ namespace Sokoban.engine.objects
             return $"Material: {Name}";
         }
 
-        public string Info()
+        public string ShowDetails()
         {
             return $"Material '{Name}' Properties:\n"
                    + $"\tAmbient Color: {AmbientColor.X} {AmbientColor.Y} {AmbientColor.Z}\n"

@@ -7,7 +7,9 @@ using System.Numerics;
 using Sokoban.engine.renderer;
 using Sokoban.primitives;
 using Sokoban.utilities;
+using GameObject = Sokoban.primitives.GameObject;
 using Path = Sokoban.utilities.Path;
+using Texture = Sokoban.engine.renderer.Texture;
 
 namespace Sokoban.engine.objects
 {
@@ -42,7 +44,7 @@ namespace Sokoban.engine.objects
             foreach (var (i, name) in MeshLoader.MaterialChangeIndices)
             {
                 var material = materials.Find(m => m.Name == name)!;
-                Console.WriteLine(material.Info());
+                Console.WriteLine(material.ShowDetails());
                 changeIndicesMaterials[i] = material;
             }
 
