@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Silk.NET.OpenGL;
+using Sokoban.engine.objects;
+using Sokoban.utilities;
 using Shader = Sokoban.engine.renderer.Shader;
 
 namespace Sokoban.engine.renderer
 {
-    public class ShaderProgram : IDisposable
+    internal class ShaderProgram : IDisposable
     {
         private uint Handle { get; }
-        private readonly List<Shader> _shaders = new();
+        private List<Shader> Shaders { get; } = new();
         public Action Configuration;
         public ShaderProgram(Action configuration = null, params Shader[] shaders)
         {
@@ -27,8 +29,9 @@ namespace Sokoban.engine.renderer
         private void VerifyLinkStatus()
         {
             Api.Gl.GetProgram(Handle, GLEnum.LinkStatus, out var status);
-            if (status == 0)
-                throw new Exception($"Program failed to link with error: {Api.Gl.GetProgramInfoLog(Handle)}");
+            if (status != 0) return;
+            $"Program <c9 failed> to link with error: <c9 {Api.Gl.GetProgramInfoLog(Handle)}>".LogLine();
+            throw new Exception();
         }
 
         public void Bind()
@@ -61,12 +64,15 @@ namespace Sokoban.engine.renderer
         {
             Api.Gl.Uniform4(UniformLocation(name), value);
         }
+        public unsafe void SetUniform(string name, Color color)
+        {
+            Api.Gl.Uniform4(UniformLocation(name), new Vector4(color.R, color.G, color.B, color.A));
+        }
 
         public unsafe void SetUniform(string name, Matrix4x4 value, bool transpose = false)
         {
             Api.Gl.UniformMatrix4(UniformLocation(name), 1, transpose, (float*) &value);
         }
-
 
         private int UniformLocation(string name)
         {
@@ -83,22 +89,21 @@ namespace Sokoban.engine.renderer
 
         public void AttachShaders(params Shader[] shaders)
         {
-            Bind();
             foreach (var shader in shaders) AttachShader(shader);
         }
         public void AttachShader(Shader shader)
         {
-            _shaders.Add(shader);
+            Shaders.Add(shader);
             Api.Gl.AttachShader(Handle, shader.Handle);
         }
 
         public void DetachShaders()
         {
-            foreach (var shader in _shaders) DetachShader(shader);
+            foreach (var shader in Shaders) DetachShader(shader);
         }
         private void DetachShader(Shader shader)
         {
-            _shaders.Remove(shader);
+            Shaders.Remove(shader);
             Api.Gl.DetachShader(Handle, shader.Handle);
         }
 
@@ -106,11 +111,17 @@ namespace Sokoban.engine.renderer
         {
             Api.Gl.DeleteProgram(Handle);
         }
-        public static readonly ShaderProgram Default = new
+        public static readonly ShaderProgram DefaultBase = new
         (
             () => { },
             new Shader(ShaderType.VertexShader, "BaseShader"),
             new Shader(ShaderType.FragmentShader, "BaseShader")
+        );
+        public static readonly ShaderProgram Default = new
+        (
+            () => { },
+            new Shader(ShaderType.VertexShader, "Default"),
+            new Shader(ShaderType.FragmentShader, "Default")
         );
     }
 }

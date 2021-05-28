@@ -8,7 +8,7 @@ namespace Sokoban.engine.renderer
     {
         public override string ToString()
         {
-            return $"Shader : {Type.ToString()} -  {Name}";
+            return $"Shader({Name}: {Type})";
         }
 
         public Shader(ShaderType type, string name)
@@ -19,10 +19,14 @@ namespace Sokoban.engine.renderer
 
             Api.Gl.ShaderSource(Handle, Source);
             Api.Gl.CompileShader(Handle);
+            VerifyCompilation();
+        }
 
+        private void VerifyCompilation()
+        {
             var infoLog = Api.Gl.GetShaderInfoLog(Handle);
             if (!string.IsNullOrWhiteSpace(infoLog))
-                throw new Exception($"Error compiling shader of type {type}, failed with error {infoLog}");
+                throw new Exception($"Error compiling shader of type {Type}, failed with error {infoLog}");
         }
 
         public uint Handle { get; }
@@ -31,11 +35,9 @@ namespace Sokoban.engine.renderer
 
         private string Source => Shaderpath.LoadFileToString();
         private Path Shaderpath => Path.Shaders / $"{Name}{Extension}";
-        private string Extension => FindCorrespondingExtension();
-
-        private string FindCorrespondingExtension()
+        private string Extension
         {
-            return Type switch
+            get => Type switch
             {
                 ShaderType.FragmentShader => ".frag",
                 ShaderType.VertexShader => ".vert",

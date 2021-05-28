@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Silk.NET.Input;
 using Sokoban.engine;
 using Sokoban.engine.input;
-using Sokoban.engine.objects;
 using Sokoban.primitives;
 using Sokoban.primitives.components;
-// using Sokoban.utilities;
+using Sokoban.utilities;
 
 namespace Sokoban
 {
@@ -29,10 +29,8 @@ namespace Sokoban
         }
         private static void InitializeGameObjects()
         {
-            // ObjectLoader.LoadObject("BoxStack");
-
-            Renderables.AddRange(ObjectLoader.MaybeLoad("stupid"));
-            foreach (var go in Renderables) ((GameObject) go).DefaultInitialization();
+            Renderables.AddRange(ObjectLoader.Load("Stupid"));
+            Renderables.AddRange(ObjectLoader.Load("BoxStack"));
         }
         private static void InitializeCamera()
         {

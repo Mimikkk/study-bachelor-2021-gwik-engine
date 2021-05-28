@@ -1,10 +1,13 @@
-﻿using Silk.NET.OpenGL;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Silk.NET.OpenGL;
 
 namespace Sokoban.engine.renderer
 {
-    public class IndexBuffer : BufferObject<uint>
+    public class IndexBuffer : BufferObject<int>
     {
-        public IndexBuffer(uint[] indices) : base(indices, BufferTargetARB.ElementArrayBuffer)
+        public IndexBuffer(IEnumerable<int> indices) 
+            : base(indices.ToArray(), BufferTargetARB.ElementArrayBuffer)
         {
         }
     }

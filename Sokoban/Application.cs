@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using Sokoban.utilities;
+﻿using Sokoban.utilities;
 
 namespace Sokoban
 {

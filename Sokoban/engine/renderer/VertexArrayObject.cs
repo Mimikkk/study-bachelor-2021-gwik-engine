@@ -3,13 +3,14 @@ using Silk.NET.OpenGL;
 
 namespace Sokoban.engine.renderer
 {
-    public class VertexArrayObject : IDisposable
+    internal class VertexArrayObject : IDisposable
     {
         private uint Handle { get; }
-        public VertexBuffer VertexBufferObject { get; }
-        public IndexBuffer IndexBufferObject { get; }
+        private VertexBuffer VertexBufferObject { get; }
+        private IndexBuffer IndexBufferObject { get; }
+
         public uint IndexCount =>
-            _vertexOffset == 0 ? 0 : VertexBufferObject.VertexDataLength / (sizeof(float) * _vertexOffset);
+            _vertexOffset == 0 ? 0 : VertexBufferObject.Length / (sizeof(float) * _vertexOffset);
         private uint _vertexOffset;
         private uint _layoutSize;
 
@@ -18,7 +19,6 @@ namespace Sokoban.engine.renderer
             Handle = Api.Gl.GenVertexArray();
             VertexBufferObject = vbo;
             IndexBufferObject = ibo;
-            Bind();
         }
         public void ConfigureLayout(params LayoutElement[] layoutElements)
         {

@@ -9,7 +9,7 @@ namespace Sokoban.engine.renderer
     {
         public static void Render(params IRenderable[] renderables)
         {
-            foreach (var renderable in renderables.Where(r => r.IsConfigured)) renderable.Render();
+            foreach (var renderable in renderables) renderable.Render();
         }
 
         internal static void Draw(VertexArrayObject vao, ShaderProgram spo)

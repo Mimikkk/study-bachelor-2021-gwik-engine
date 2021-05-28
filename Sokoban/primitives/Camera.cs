@@ -77,7 +77,7 @@ namespace Sokoban.primitives
 
 
         private const float LookSensitivity = 0.1f;
-        private const float MoveSpeed = 0.1f;
+        private const float MoveSpeed = 30f;
         private Vector2 _lastMousePosition;
         private void InitializeController()
         {

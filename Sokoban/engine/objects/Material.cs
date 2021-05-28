@@ -1,76 +1,69 @@
 ﻿#nullable enable
-using System.Numerics;
-using Texture = Sokoban.engine.renderer.Texture;
+using Sokoban.engine.renderer;
+using Sokoban.utilities;
 
 namespace Sokoban.engine.objects
 {
-    internal class Material : IHasInfo
+    internal class Material : IHasLog
     {
-        public override string ToString()
-        {
-            return $"Material: {Name}";
-        }
-
-        public string ShowDetails()
-        {
-            return $"Material '{Name}' Properties:\n"
-                   + $"\tAmbient Color: {AmbientColor.X} {AmbientColor.Y} {AmbientColor.Z}\n"
-                   + $"\tDiffuse Color: {DiffuseColor.X} {DiffuseColor.Y} {DiffuseColor.Z}\n"
-                   + $"\tSpecular Color: {SpecularColor.X} {SpecularColor.Y} {SpecularColor.Z}\n"
-                   + $"\tEmission Color: {EmissionColor.X} {EmissionColor.Y} {EmissionColor.Z}\n"
-                   + $"\tOptical Density: {OpticalDensity}\n"
-                   + $"\tDissolve: {Dissolve}\n"
-                   + $"\tIllumination: {Illumination}\n"
-                   + $"\tSpecular Exponent: {SpecularExponent}\n"
-                   + $"\tTextures:\n"
-                   + (AmbientMap != null ? $"\t\tAmbientMap: {AmbientMap.Name}\n" : "")
-                   + (DiffuseMap != null ? $"\t\tAmbientMap: {DiffuseMap.Name}\n" : "")
-                   + (SpecularMap != null ? $"\t\tAmbientMap: {SpecularMap.Name}\n" : "")
-                   + (HighlightMap != null ? $"\t\tAmbientMap: {HighlightMap.Name}\n" : "")
-                   + (AlphaMap != null ? $"\t\tAmbientMap: {AlphaMap.Name}\n" : "")
-                   + (BumpMap != null ? $"\t\tAmbientMap: {BumpMap.Name}\n" : "");
-        }
-
-        public string Name { get; }
-
-        public Vector3 AmbientColor { get; set; }
-        public Vector3 DiffuseColor { get; set; }
-        public Vector3 SpecularColor { get; set; }
-        public Vector3 EmissionColor { get; set; }
-
-        public float OpticalDensity { get; set; }
-        public float Dissolve { get; set; }
-        public float Illumination { get; set; }
-        public float SpecularExponent { get; set; }
-
-        public Texture? AmbientMap { get; set; }
-        public Texture? DiffuseMap { get; set; }
-        public Texture? SpecularMap { get; set; }
-        public Texture? HighlightMap { get; set; }
-        public Texture? AlphaMap { get; set; }
-        public Texture? BumpMap { get; set; }
-
         public Material(string name)
         {
             Name = name;
         }
-
-        public static readonly Material Default = new("Default")
+        public void Log(int depth = 0)
         {
-            AmbientColor = Vector3.Zero,
-            DiffuseColor = Vector3.Zero,
-            EmissionColor = Vector3.Zero,
-            SpecularColor = Vector3.Zero,
-            OpticalDensity = 1,
-            SpecularExponent = 1,
-            Dissolve = 2,
-            Illumination = 2,
-            AlphaMap = null,
-            DiffuseMap = new Texture("MissingTexture.png"),
-            HighlightMap = null,
-            AmbientMap = null,
-            BumpMap = null,
-            SpecularMap = null,
-        };
+            $"<c20 Material>: <c22 {Name}>".LogLine(depth);
+            $"<c88 Values>".LogLine(2 + depth);
+            $"<c70 Opacity>: {Opacity}".LogLine(4 + depth);
+            $"<c70 Reflectivity>: {Reflectivity}".LogLine(4 + depth);
+            $"<c70 Shininess>: {Shininess}".LogLine(4 + depth);
+            $"<c70 BumpScaling>: {BumpScaling}".LogLine(4 + depth);
+            $"<c70 ShininessStrength>: {ShininessStrength}".LogLine(4 + depth);
+            $"<c70 TransparencyFactor>: {TransparencyFactor}".LogLine(4 + depth);
+            $"<c88 Colors>".LogLine(2 + depth);
+            $"<c70 Ambient>: {AmbientColor}".LogLine(4 + depth);
+            $"<c70 Diffuse>: {DiffuseColor}".LogLine(4 + depth);
+            $"<c70 Emissive>: {EmissiveColor}".LogLine(4 + depth);
+            $"<c70 Reflective>: {ReflectiveColor}".LogLine(4 + depth);
+            $"<c70 Specular>: {SpecularColor}".LogLine(4 + depth);
+            $"<c70 Transparent>: {TransparentColor}".LogLine(4 + depth);
+            $"<c88 Maps>".LogLine(2 + depth);
+            $"<c70 AmbientMap>: {AmbientTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+            $"<c70 DiffuseMap>: {DiffuseTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+            $"<c70 DisplacementMap>: {DisplacementTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+            $"<c70 EmissiveMap>: {EmissiveTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+            $"<c70 HeightMap>: {HeightTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+            $"<c70 NormalMap>: {NormalTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+            $"<c70 OpacityMap>: {OpacityTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+            $"<c70 ReflectionMap>: {ReflectionTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+            $"<c70 AmbientOcclusionMap>: {AmbientOcclusionTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+            $"<c70 LightMap>: {LightMapTexture?.Name ?? "<c8 None>"}".LogLine(4 + depth);
+        }
+        public string Name { get; }
+
+        public float Opacity { get; set; } = 1;
+        public float Reflectivity { get; set; }
+        public float Shininess { get; set; }
+        public float ShininessStrength { get; set; } = 1;
+        public float BumpScaling { get; set; }
+        public float TransparencyFactor { get; set; } = 1f;
+
+        public Texture? AmbientTexture { get; set; }
+        public Texture? DiffuseTexture { get; set; }
+        public Texture? DisplacementTexture { get; set; }
+        public Texture? EmissiveTexture { get; set; }
+        public Texture? HeightTexture { get; set; }
+        public Texture? NormalTexture { get; set; }
+        public Texture? OpacityTexture { get; set; }
+        public Texture? ReflectionTexture { get; set; }
+        public Texture? AmbientOcclusionTexture { get; set; }
+        public Texture? LightMapTexture { get; set; }
+
+        public Color AmbientColor { get; set; } = Color.Gray;
+        public Color DiffuseColor { get; set; } = Color.White;
+        public Color EmissiveColor { get; set; } = Color.Black;
+        public Color ReflectiveColor { get; set; } = Color.Black;
+        public Color SpecularColor { get; set; } = Color.Black;
+        public Color TransparentColor { get; set; } = Color.White;
     }
 }

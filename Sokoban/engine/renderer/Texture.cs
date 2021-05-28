@@ -24,8 +24,6 @@ namespace Sokoban.engine.renderer
 
             fixed (void* d = &MemoryMarshal.GetReference(image.GetPixelRowSpan(0)))
                 Load(d, (uint) image.Width, (uint) image.Height);
-
-            image.Dispose();
         }
 
         private unsafe void Load(void* data, uint width, uint height)
@@ -37,13 +35,14 @@ namespace Sokoban.engine.renderer
             Api.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) GLEnum.ClampToEdge);
             Api.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) GLEnum.Linear);
             Api.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) GLEnum.Linear);
-            Api.Gl.GenerateMipmap(TextureTarget.Texture2D);
+            Api.Gl.GenerateTextureMipmap(Handle);
+            
         }
 
         public void Bind(int textureSlot = 0)
         {
-            Api.Gl.ActiveTexture(TextureUnit.Texture0 + textureSlot);
-            Api.Gl.BindTexture(TextureTarget.Texture2D, Handle);
+            // Api.Gl.ActiveTexture(TextureUnit.Texture0 + textureSlot);
+            // Api.Gl.BindTexture(TextureTarget.Texture2D, Handle);
         }
 
         public void Dispose()

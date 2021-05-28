@@ -8,7 +8,6 @@ namespace Sokoban.utilities
     {
         private const int StdOutputHandle = -0xB;
         private const uint EnableVirtualTerminalProcessing = 0x0004;
-        private const uint DisableNewlineAutoReturn = 0x0008;
         private const uint DefaultColorCode = 7;
         
         [DllImport("kernel32.dll")]
@@ -32,7 +31,7 @@ namespace Sokoban.utilities
                 Console.ReadKey();
                 return;
             }
-            outConsoleMode |= EnableVirtualTerminalProcessing | DisableNewlineAutoReturn;
+            outConsoleMode |= EnableVirtualTerminalProcessing;
             if (SetConsoleMode(iStdOut, outConsoleMode)) return;
             Console.WriteLine($"failed to set output console mode, error code: {GetLastError()}");
             Console.ReadKey();

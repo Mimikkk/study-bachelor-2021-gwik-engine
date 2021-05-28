@@ -7,12 +7,12 @@ namespace Sokoban.engine.renderer
         where TDataType : unmanaged
     {
         private uint Handle { get; }
-        private readonly BufferTargetARB _bufferType;
+        private BufferTargetARB BufferType { get; }
         protected readonly uint DataCount;
-        
+
         protected unsafe BufferObject(Span<TDataType> data, BufferTargetARB bufferType)
         {
-            _bufferType = bufferType;
+            BufferType = bufferType;
 
             Handle = Api.Gl.GenBuffer();
             Bind();
@@ -25,7 +25,7 @@ namespace Sokoban.engine.renderer
 
         public void Bind()
         {
-            Api.Gl.BindBuffer(_bufferType, Handle);
+            Api.Gl.BindBuffer(BufferType, Handle);
         }
 
         public void Dispose()
