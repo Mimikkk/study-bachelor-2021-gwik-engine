@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using Silk.NET.Input;
+using Silk.NET.Maths;
 
 namespace Sokoban.engine.input
 {
@@ -55,10 +55,10 @@ namespace Sokoban.engine.input
             foreach (var (button, callback) in callbacks) MouseCallbacks.Add(button, callback);
         }
 
-        public void AddMouseMoves(params Action<Vector2>[] callbacks)
+        public void AddMouseMoves(params Action<Vector2D<float>>[] callbacks)
         {
             foreach (var callback in callbacks)
-                Api.Mouse.MouseMove += (_, position) => callback(position);
+                Api.Mouse.MouseMove += (_, position) => callback(new Vector2D<float>(position.X, position.Y));
         }
         public void AddMouseScrolls(params Action<ScrollWheel>[] callbacks)
         {

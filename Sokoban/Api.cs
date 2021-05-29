@@ -20,9 +20,16 @@ namespace Sokoban
             Gl.Enable(EnableCap.CullFace);
             Gl.Enable(EnableCap.Multisample);
             Gl.Enable(EnableCap.LineSmooth);
+            Gl.Enable(EnableCap.MultisampleSgis);
+            Gl.Enable(EnableCap.MinmaxExt);
+            Gl.Enable(EnableCap.PolygonSmooth);
+            Gl.Enable(EnableCap.SampleShading);
             Gl.Hint(HintTarget.MultisampleFilterHintNV, HintMode.Nicest);
             Gl.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
             Gl.Hint(HintTarget.LineQualityHintSgix, HintMode.Nicest);
+            Gl.Hint(HintTarget.WideLineHintPgi, HintMode.Nicest);
+            Gl.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
+            Gl.Hint(HintTarget.AlwaysSoftHintPgi, HintMode.Nicest);
         }
 
         private static void InitializeInputContext(IInputContext inputContext)

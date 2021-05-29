@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using Silk.NET.Input;
+using Silk.NET.Maths;
 using Sokoban.engine;
 using Sokoban.engine.input;
 using Sokoban.primitives;
@@ -14,8 +15,10 @@ namespace Sokoban
     {
         public static void Start() => GameWindow.Run();
 
-        internal static Camera Camera { get; private set; }
+        internal static QuaternionCamera Camera { get; private set; }
         private static Controller GameController { get; } = new();
+        internal static Vector2D<float> LastMousePosition { get; set; }
+
 
         internal static readonly List<IRenderable> Renderables = new();
         internal static readonly List<IUpdateable> Updateables = new();
@@ -30,12 +33,13 @@ namespace Sokoban
         private static void InitializeGameObjects()
         {
             Renderables.AddRange(ObjectLoader.Load("Stupid"));
-            Renderables.AddRange(ObjectLoader.Load("BoxStack"));
+            // Renderables.AddRange(ObjectLoader.Load("BoxStack"));
         }
         private static void InitializeCamera()
         {
-            Camera = new Camera(new Vector3(0, 0.5f, 2), Vector3.UnitZ * -1, Vector3.UnitY);
-            Updateables.Add(Camera);
+            Camera = new QuaternionCamera(new Vector3D<float>(0, 0.5f, 2), 90, GameWindow.AspectRatio, 0.1f, 100f);
+            // Camera.NormalizeCamera();
+            // Updateables.Add(Camera);
         }
         private static void InitializeCallbacks()
         {

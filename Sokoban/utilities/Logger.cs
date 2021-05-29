@@ -37,7 +37,7 @@ namespace Sokoban.utilities
             Console.ReadKey();
         }
 
-        private static readonly Regex ColorPattern = new(@"<c(\d+)\s*(.*?)>");
+        private static readonly Regex ColorPattern = new(@"<c(\d+)\s*((.|\n)*?)>", RegexOptions.Multiline);
 
         private static string ColorCode(object code = null) 
             => $"\u001b[38;5;{code ?? DefaultColorCode}m";

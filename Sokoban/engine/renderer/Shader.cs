@@ -25,8 +25,9 @@ namespace Sokoban.engine.renderer
         private void VerifyCompilation()
         {
             var infoLog = Api.Gl.GetShaderInfoLog(Handle);
-            if (!string.IsNullOrWhiteSpace(infoLog))
-                throw new Exception($"Error compiling shader of type {Type}, failed with error {infoLog}");
+            if (string.IsNullOrWhiteSpace(infoLog)) return;
+            $"<c6 Error compiling shader of type> <c124 {Type}>, <c6 failed with error> <c124 {infoLog}>".LogLine();
+            throw new Exception();
         }
 
         public uint Handle { get; }

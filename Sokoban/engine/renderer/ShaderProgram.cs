@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Sokoban.engine.objects;
 using Sokoban.utilities;
@@ -30,7 +31,7 @@ namespace Sokoban.engine.renderer
         {
             Api.Gl.GetProgram(Handle, GLEnum.LinkStatus, out var status);
             if (status != 0) return;
-            $"Program <c9 failed> to link with error: <c9 {Api.Gl.GetProgramInfoLog(Handle)}>".LogLine();
+            $"<c6 Program> <c124 failed> <c6 to link with error>: <c124 {Api.Gl.GetProgramInfoLog(Handle)}>".LogLine();
             throw new Exception();
         }
 
@@ -52,24 +53,24 @@ namespace Sokoban.engine.renderer
             Api.Gl.Uniform1(UniformLocation(name), value);
         }
 
-        public unsafe void SetUniform(string name, Vector2 value)
+        public unsafe void SetUniform(string name, Vector2D<float> value)
         {
-            Api.Gl.Uniform2(UniformLocation(name), value);
+            Api.Gl.Uniform2(UniformLocation(name), (Vector2) value);
         }
-        public unsafe void SetUniform(string name, Vector3 value)
+        public unsafe void SetUniform(string name, Vector3D<float> value)
         {
-            Api.Gl.Uniform3(UniformLocation(name), value);
+            Api.Gl.Uniform3(UniformLocation(name), (Vector3) value);
         }
-        public unsafe void SetUniform(string name, Vector4 value)
+        public unsafe void SetUniform(string name, Vector4D<float> value)
         {
-            Api.Gl.Uniform4(UniformLocation(name), value);
+            Api.Gl.Uniform4(UniformLocation(name), (Vector4) value);
         }
         public unsafe void SetUniform(string name, Color color)
         {
             Api.Gl.Uniform4(UniformLocation(name), new Vector4(color.R, color.G, color.B, color.A));
         }
 
-        public unsafe void SetUniform(string name, Matrix4x4 value, bool transpose = false)
+        public unsafe void SetUniform(string name, Matrix4X4<float> value, bool transpose = false)
         {
             Api.Gl.UniformMatrix4(UniformLocation(name), 1, transpose, (float*) &value);
         }
@@ -111,12 +112,7 @@ namespace Sokoban.engine.renderer
         {
             Api.Gl.DeleteProgram(Handle);
         }
-        public static readonly ShaderProgram DefaultBase = new
-        (
-            () => { },
-            new Shader(ShaderType.VertexShader, "BaseShader"),
-            new Shader(ShaderType.FragmentShader, "BaseShader")
-        );
+
         public static readonly ShaderProgram Default = new
         (
             () => { },

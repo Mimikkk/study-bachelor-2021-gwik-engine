@@ -1,15 +1,15 @@
-﻿using System.Numerics;
+﻿using Silk.NET.Maths;
 
 namespace Sokoban.primitives.components
 {
     public interface ITransform
     {
-        public Vector3 Position { get; set; }
+        public Vector3D<float> Position { get; set; }
         public float Scale { get; set; }
-        public Quaternion Rotation { get; set; }
+        public Quaternion<float> Rotation { get; set; }
 
-        public Matrix4x4 ViewMatrix => Matrix4x4.Identity * Matrix4x4.CreateFromQuaternion(Rotation)
-                                                          * Matrix4x4.CreateScale(Scale)
-                                                          * Matrix4x4.CreateTranslation(Position);
+        public Matrix4X4<float> View => Matrix4X4<float>.Identity * Matrix4X4.CreateFromQuaternion(Rotation)
+                                                                        * Matrix4X4.CreateScale(Scale)
+                                                                        * Matrix4X4.CreateTranslation(Position);
     }
 }
