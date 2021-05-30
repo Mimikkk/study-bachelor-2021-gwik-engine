@@ -12,7 +12,7 @@ namespace Sokoban.utilities
             operation();
         }
 
-        public static T OperationIfConditionAndGet<T>(ref T field, bool condition, Action operation)
+        public static T OperationIfConditionAndGet<T>(T field, bool condition, Action operation)
         {
             if (condition) operation();
             return field;

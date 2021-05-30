@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using Assimp;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -32,11 +33,6 @@ namespace Sokoban.engine
         }
         private static void OnUpdate(double deltaTime)
         {
-            Game.Camera.CameraController.Update(deltaTime);
-            $"Current Camera: <c9 {Game.Camera.View}>".LogLine();
-            $"{Game.Camera.Forward}".LogLine();
-            $"{Game.Camera.Up}".LogLine();
-            $"{Game.Camera.Left}".LogLine();
             Game.Updateables.ForEach(u => u.Update(deltaTime));
         }
         private static void OnRender(double deltaTime)

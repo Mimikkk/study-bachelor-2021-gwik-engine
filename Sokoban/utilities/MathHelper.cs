@@ -1,5 +1,4 @@
 ﻿using System;
-using Silk.NET.Maths;
 
 namespace Sokoban.utilities
 {

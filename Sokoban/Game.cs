@@ -38,6 +38,7 @@ namespace Sokoban
         private static void InitializeCamera()
         {
             Camera = new QuaternionCamera(new Vector3D<float>(0, 0.5f, 2), 90, GameWindow.AspectRatio, 0.1f, 100f);
+            Camera.Log();
             // Camera.NormalizeCamera();
             // Updateables.Add(Camera);
         }
