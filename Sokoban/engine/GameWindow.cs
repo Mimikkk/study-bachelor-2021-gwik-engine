@@ -9,13 +9,6 @@ namespace Sokoban.engine
 {
     public class GameWindow
     {
-        public void Run() => Window.Run();
-        public void Close() => Window.Close();
-
-        public float Width => Window.Size.X;
-        public float Height => Window.Size.Y;
-        public float AspectRatio => Width / Height;
-
         public GameWindow()
         {
             Window = WindowType.Create(WindowOptions);
@@ -24,25 +17,30 @@ namespace Sokoban.engine
             Window.Render += OnRender;
         }
 
+        public float AspectRatio => Width / Height;
+
+        public void Run() => Window.Run();
+        public void Close() => Window.Close();
+
+        private float Width => Window.Size.X;
+        private float Height => Window.Size.Y;
+
         private void OnLoad()
         {
             Window.Center();
             Api.Initialize(Window);
             Game.Initialize();
         }
-        private static void OnUpdate(double deltaTime)
-        {
-            // Game.Camera.LookAt(Vector3D<float>.One, Vector3D<float>.UnitY);
-            Game.Updateables.ForEach(u => u.Update(deltaTime));
-        }
+
+        private static void OnUpdate(double deltaTime) { Game.Updateables.ForEach(u => u.Update(deltaTime)); }
 
         private static void OnRender(double deltaTime)
         {
             Renderer.Clear();
-            Game.Renderables.ForEach(go => go.Render());
+            Game.Renderables.ForEach(Renderer.Draw);
         }
 
-        public IWindow Window { get; }
+        private IWindow Window { get; }
         private static WindowOptions WindowOptions
         {
             get

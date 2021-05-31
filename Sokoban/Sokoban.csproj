@@ -16,8 +16,4 @@
       <Compile Remove="engine\objects\ObjectLoader.cs" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="engine\input" />
-    </ItemGroup>
-
 </Project>

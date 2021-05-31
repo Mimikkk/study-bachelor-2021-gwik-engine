@@ -1,19 +1,13 @@
 ﻿#nullable enable
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Assimp;
 using Silk.NET.Maths;
 using Sokoban.engine.objects;
 using Sokoban.engine.renderer;
-using Sokoban.entities;
 using Sokoban.primitives;
-using Sokoban.primitives.components;
 using Material = Sokoban.engine.objects.Material;
-using Matrix4x4 = System.Numerics.Matrix4x4;
 using Mesh = Sokoban.engine.objects.Mesh;
-using Quaternion = System.Numerics.Quaternion;
 
 namespace Sokoban.utilities
 {
@@ -25,12 +19,9 @@ namespace Sokoban.utilities
         private static string Filepath => $"{Path.Objects / Name}.obj";
         private static readonly List<Mesh> Meshes = new();
         private static readonly List<Material> Materials = new();
-        private const PostProcessSteps PostProcess =
-            PostProcessSteps.Triangulate
-            | PostProcessSteps.GenerateNormals
-            | PostProcessSteps.GenerateUVCoords
-            | PostProcessSteps.ImproveCacheLocality
-            | PostProcessSteps.OptimizeGraph
+
+        private const PostProcessSteps PostProcess = PostProcessSteps.Triangulate | PostProcessSteps.GenerateNormals
+            | PostProcessSteps.GenerateUVCoords | PostProcessSteps.ImproveCacheLocality | PostProcessSteps.OptimizeGraph
             | PostProcessSteps.OptimizeMeshes;
 
         public static IEnumerable<GameObject> Load(string name)
@@ -54,19 +45,15 @@ namespace Sokoban.utilities
             foreach (var material in Materials) material.Log(4);
         }
 
-        private static void LoadMeshes()
-        {
-            Meshes.AddRange(Scene.Meshes.Select(raw => new Mesh(raw.Name, raw.Vertices
-                    .Select(p => new Vector3D<float>(p.X, p.Y, p.Z))
-                    .Zip(raw.TextureCoordinateChannels[0]
-                        .Select(vec => new Vector2D<float>(vec.X, vec.Y)))
-                    .Zip(raw.Normals.Select(n => new Vector3D<float>(n.X, n.Y, n.Z)))
-                    .Select(ptn => new Vertex(ptn.First.First, ptn.First.Second, ptn.Second)),
-                raw.Faces.SelectMany(face => face.Indices), Materials[raw.MaterialIndex])));
-        }
+        private static void LoadMeshes() => Meshes.AddRange(Scene.Meshes.Select(raw => new Mesh(raw.Name,
+            raw.Vertices.Select(p => new Vector3D<float>(p.X, p.Y, p.Z))
+                .Zip(raw.TextureCoordinateChannels[0].Select(vec => new Vector2D<float>(vec.X, vec.Y)))
+                .Zip(raw.Normals.Select(n => new Vector3D<float>(n.X, n.Y, n.Z))).Select(ptn
+                    => new Vertex(ptn.First.First, ptn.First.Second, ptn.Second)),
+            raw.Faces.SelectMany(face => face.Indices), Materials[raw.MaterialIndex])));
+
         private static void LoadMaterials()
-        {
-            Materials.AddRange(Scene.Materials.Select(raw => new Material(raw.Name ?? "Unnamed")
+            => Materials.AddRange(Scene.Materials.Select(raw => new Material(raw.Name ?? "Unnamed")
             {
                 Opacity = raw.Opacity,
                 Reflectivity = raw.Reflectivity,
@@ -91,20 +78,18 @@ namespace Sokoban.utilities
                 AmbientOcclusionTexture = raw.TextureAmbientOcclusion.ToTexture(),
                 LightMapTexture = raw.TextureLightMap.ToTexture()
             }).ToList());
-        }
+
         private static void Initialize(string name)
         {
             Materials.Clear();
             Meshes.Clear();
             Name = name;
         }
+
         private static Color ToColor(this Color4D color4D)
-        {
-            return new Color(color4D.R, color4D.G, color4D.B, color4D.A);
-        }
+            => new(color4D.R, color4D.G, color4D.B, color4D.A);
+
         private static Texture? ToTexture(this TextureSlot slot)
-        {
-            return slot.FilePath == null ? null : new Texture(slot.FilePath.Split("\\\\").Last());
-        }
+            => slot.FilePath == null ? null : new Texture(slot.FilePath.Split("\\\\").Last());
     }
 }

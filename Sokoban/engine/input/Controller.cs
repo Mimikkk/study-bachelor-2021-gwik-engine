@@ -1,32 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Assimp;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Sokoban.primitives.components;
 using static Sokoban.utilities.FieldExtensions;
 
-namespace Sokoban.primitives
+namespace Sokoban.engine.input
 {
-    internal class CameraController : Controller { }
-    internal class GameController : Controller { }
-
-    internal abstract class Controller : IUpdateable
+    internal class Controller : IUpdateable
     {
-        private List<(Key, Action<double>)> KeyboardHoldCallbacks { get; } = new();
-        private List<Action<IKeyboard, Key, int>> KeyboardPushCallbacks { get; } = new();
-        private List<Action<IKeyboard, Key, int>> KeyboardReleaseCallbacks { get; } = new();
-
-        private List<(MouseButton, Action<double>)> MouseHoldCallbacks { get; } = new();
-        private List<Action<IMouse, MouseButton>> MousePushCallbacks { get; } = new();
-        private List<Action<IMouse, MouseButton>> MouseReleaseCallbacks { get; } = new();
-        private List<Action<IMouse, MouseButton, Vector2>> MouseClickCallbacks { get; } = new();
-        private List<Action<IMouse, MouseButton, Vector2>> MouseDoubleClickCallbacks { get; } = new();
-        private List<Action<IMouse, ScrollWheel>> MouseScrollCallbacks { get; } = new();
-        private List<Action<IMouse, Vector2>> MouseMoveCallbacks { get; } = new();
-
-        private bool _isActive;
         public bool IsActive
         {
             get => _isActive;
@@ -36,54 +19,47 @@ namespace Sokoban.primitives
         public void Update(double deltaTime)
         {
             if (!IsActive) return;
+            var dt = (float) deltaTime;
             foreach (var (key, callback) in KeyboardHoldCallbacks)
             {
-                if (Api.Keyboard.IsKeyPressed(key)) callback(deltaTime);
+                if (Api.Keyboard.IsKeyPressed(key)) callback(dt);
             }
             foreach (var (button, callback) in MouseHoldCallbacks)
             {
-                if (Api.Mouse.IsButtonPressed(button)) callback(deltaTime);
+                if (Api.Mouse.IsButtonPressed(button)) callback(dt);
             }
         }
 
-        public void AddHold(Key key, Action<double> callback) { KeyboardHoldCallbacks.Add((key, callback)); }
+        public void AddHold(Key key, Action<float> callback) { KeyboardHoldCallbacks.Add((key, callback)); }
         public void AddPush(Key key, Action callback)
-        {
-            KeyboardPushCallbacks.Add((_, k, _) =>
+            => KeyboardPushCallbacks.Add((_, k, _) =>
             {
                 if (key == k) callback();
             });
-        }
         public void AddRelease(Key key, Action callback)
-        {
-            KeyboardReleaseCallbacks.Add((_, k, _) =>
+            => KeyboardReleaseCallbacks.Add((_, k, _) =>
             {
                 if (key == k) callback();
             });
-        }
 
-        public void AddHold(MouseButton button, Action<double> callback) { MouseHoldCallbacks.Add((button, callback)); }
+        public void AddHold(MouseButton button, Action<float> callback) { MouseHoldCallbacks.Add((button, callback)); }
         public void AddPush(MouseButton button, Action callback)
-        {
-            MousePushCallbacks.Add((_, b) =>
+            => MousePushCallbacks.Add((_, b) =>
             {
                 if (button == b) callback();
             });
-        }
+
         public void AddRelease(MouseButton button, Action callback)
-        {
-            MouseReleaseCallbacks.Add((_, b) =>
+            => MouseReleaseCallbacks.Add((_, b) =>
             {
                 if (button == b) callback();
             });
-        }
+
         public void AddClick(MouseButton button, Action callback)
-        {
-            MouseClickCallbacks.Add((_, b, _) =>
+            => MouseClickCallbacks.Add((_, b, _) =>
             {
                 if (button == b) callback();
             });
-        }
         public void AddDoubleClick(MouseButton button, Action callback)
         {
             MouseClickCallbacks.Add((_, b, _) =>
@@ -121,5 +97,19 @@ namespace Sokoban.primitives
             MouseScrollCallbacks.ForEach(callback => Api.Mouse.Scroll -= callback);
             MouseMoveCallbacks.ForEach(callback => Api.Mouse.MouseMove -= callback);
         }
+
+        private List<(Key, Action<float>)> KeyboardHoldCallbacks { get; } = new();
+        private List<Action<IKeyboard, Key, int>> KeyboardPushCallbacks { get; } = new();
+        private List<Action<IKeyboard, Key, int>> KeyboardReleaseCallbacks { get; } = new();
+
+        private List<(MouseButton, Action<float>)> MouseHoldCallbacks { get; } = new();
+        private List<Action<IMouse, MouseButton>> MousePushCallbacks { get; } = new();
+        private List<Action<IMouse, MouseButton>> MouseReleaseCallbacks { get; } = new();
+        private List<Action<IMouse, MouseButton, Vector2>> MouseClickCallbacks { get; } = new();
+        private List<Action<IMouse, MouseButton, Vector2>> MouseDoubleClickCallbacks { get; } = new();
+        private List<Action<IMouse, ScrollWheel>> MouseScrollCallbacks { get; } = new();
+        private List<Action<IMouse, Vector2>> MouseMoveCallbacks { get; } = new();
+
+        private bool _isActive;
     }
 }

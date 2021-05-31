@@ -13,12 +13,10 @@ namespace Sokoban.engine.renderer
     {
         private uint Handle { get; }
         private List<Shader> Shaders { get; } = new();
-        public Action Configuration;
-        public ShaderProgram(Action configuration = null, params Shader[] shaders)
+        public ShaderProgram(params Shader[] shaders)
         {
             Handle = Api.Gl.CreateProgram();
             AttachShaders(shaders);
-            Configuration = configuration;
             Link();
         }
 
@@ -115,7 +113,6 @@ namespace Sokoban.engine.renderer
 
         public static readonly ShaderProgram Default = new
         (
-            () => { },
             new Shader(ShaderType.VertexShader, "Default"),
             new Shader(ShaderType.FragmentShader, "Default")
         );

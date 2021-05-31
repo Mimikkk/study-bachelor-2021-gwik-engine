@@ -10,10 +10,7 @@ namespace Sokoban.engine.renderer
 {
     internal class Texture : IDisposable
     {
-        private uint Handle { get; }
         public string Name { get; }
-        private Path Imagepath => Path.Textures / Name;
-
         public unsafe Texture(string name)
         {
             Handle = Api.Gl.GenTexture();
@@ -26,6 +23,10 @@ namespace Sokoban.engine.renderer
                 Load(d, (uint) image.Width, (uint) image.Height);
         }
 
+        private uint Handle { get; }
+        private Path Imagepath => Path.Textures / Name;
+
+
         private unsafe void Load(void* data, uint width, uint height)
         {
             Bind();
@@ -36,13 +37,12 @@ namespace Sokoban.engine.renderer
             Api.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) GLEnum.Linear);
             Api.Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) GLEnum.Linear);
             Api.Gl.GenerateTextureMipmap(Handle);
-            
         }
 
         public void Bind(int textureSlot = 0)
         {
-            // Api.Gl.ActiveTexture(TextureUnit.Texture0 + textureSlot);
-            // Api.Gl.BindTexture(TextureTarget.Texture2D, Handle);
+            Api.Gl.ActiveTexture(TextureUnit.Texture0 + textureSlot);
+            Api.Gl.BindTexture(TextureTarget.Texture2D, Handle);
         }
 
         public void Dispose()

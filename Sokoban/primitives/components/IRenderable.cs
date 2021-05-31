@@ -7,9 +7,6 @@ namespace Sokoban.primitives.components
     {
         public Mesh Mesh { get; }
         public ShaderProgram Spo { get; }
-        public void Render()
-        {
-            Renderer.Draw(Mesh.Vao, Spo);
-        }
+        public void ShaderConfiguration();
     }
 }
