@@ -29,7 +29,7 @@ namespace Sokoban.primitives
 
         public virtual void ShaderConfiguration()
         {
-            Mesh.Material.AmbientTexture?.Bind(0);
+            Mesh.Material.DiffuseTexture?.Bind(0);
 
             Spo.SetUniform("u_Projection", Game.Camera.Projection);
             Spo.SetUniform("u_View", Game.Camera.Lens.View);

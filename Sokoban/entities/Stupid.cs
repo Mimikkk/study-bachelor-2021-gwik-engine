@@ -11,14 +11,13 @@ namespace Sokoban.entities
     {
         public ITransform Transform => this;
 
-        public Stupid(string name = "unnamed") : base(GameObject)
+        public Stupid(string name = "Unnamed") : base(GameObject)
         {
             Name = name;
         }
         public override void ShaderConfiguration()
         {
-            Mesh.Material.AmbientTexture?.Bind(0);
-            Mesh.Material.AmbientTexture?.Bind(0);
+            Mesh.Material.DiffuseTexture?.Bind(0);
 
             Spo.SetUniform("u_Projection", Game.Camera.Projection);
             Spo.SetUniform("u_View", Game.Camera.Lens.View);

@@ -30,8 +30,8 @@ namespace Sokoban
         }
         private static void InitializeGameObjects()
         {
-            var stupid = new Stupid();
             var box = new Cube("hoh?");
+            var stupid = new Stupid();
             var bc = new Controller();
             Renderables.Add(stupid);
             Renderables.Add(box);

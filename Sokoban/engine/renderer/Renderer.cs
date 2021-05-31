@@ -24,7 +24,7 @@ namespace Sokoban.engine.renderer
         public static void Clear()
         {
             // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
-            Api.Gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
+            Api.Gl.Clear((uint) (ClearBufferMask.ColorBufferBit  | ClearBufferMask.DepthBufferBit));
         }
 
         public static void SetDrawMode(PolygonMode mode) { Api.Gl.PolygonMode(MaterialFace.FrontAndBack, mode); }
