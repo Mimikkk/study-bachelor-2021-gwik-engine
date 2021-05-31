@@ -5,11 +5,10 @@ namespace Sokoban.utilities
 {
     internal static class FieldExtensions
     {
-        public static void SetAndOperation<T>(ref T field, T value, Action operation)
+        public static void SetAndOperation(Action setter, Action? operation)
         {
-            if (field == null) throw new ArgumentNullException(nameof(field));
-            field = value;
-            operation();
+            setter.Invoke();
+            operation?.Invoke();
         }
 
         public static T OperationIfConditionAndGet<T>(T field, bool condition, Action operation)

@@ -1,7 +1,15 @@
-﻿namespace Sokoban.primitives.components
+﻿using Sokoban.engine.objects;
+using Sokoban.engine.renderer;
+
+namespace Sokoban.primitives.components
 {
-    public interface IRenderable
+    internal interface IRenderable
     {
-        public void Render();
+        public Mesh Mesh { get; }
+        public ShaderProgram Spo { get; }
+        public void Render()
+        {
+            Renderer.Draw(Mesh.Vao, Spo);
+        }
     }
 }

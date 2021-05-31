@@ -7,6 +7,7 @@ using Assimp;
 using Silk.NET.Maths;
 using Sokoban.engine.objects;
 using Sokoban.engine.renderer;
+using Sokoban.entities;
 using Sokoban.primitives;
 using Sokoban.primitives.components;
 using Material = Sokoban.engine.objects.Material;

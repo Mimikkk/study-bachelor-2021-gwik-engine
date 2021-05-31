@@ -1,6 +1,7 @@
 ﻿using System;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
+using Silk.NET.Windowing;
 
 namespace Sokoban
 {
@@ -54,10 +55,10 @@ namespace Sokoban
             if (InputContext.Keyboards.Count > 0) Keyboard = InputContext.Keyboards[0];
             if (Keyboard == null) throw new Exception("Main: No Keyboard detected");
         }
-        internal static void Initialize(GL gl, IInputContext inputContext)
+        internal static void Initialize(IWindow window)
         {
-            InitializeOpenGl(gl);
-            InitializeInputContext(inputContext);
+            InitializeOpenGl(GL.GetApi(window));
+            InitializeInputContext(window.CreateInput());
         }
     }
 }
