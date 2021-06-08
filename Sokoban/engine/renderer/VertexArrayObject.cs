@@ -1,71 +1,73 @@
-﻿using System;
+﻿#nullable enable
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Silk.NET.OpenGL;
+using static Sokoban.utilities.FieldExtensions;
 
 namespace Sokoban.engine.renderer
 {
-    internal class VertexArrayObject : IDisposable
+internal class VertexArrayObject : IDisposable
+{
+    private uint Handle { get; }
+    public VertexBuffer VertexBufferObject { get; init; }
+    public IndexBuffer? IndexBufferObject { get; init; }
+
+    public uint Size => IndexBufferObject?.Count
+                        ?? (PerVertexSize != 0 ? VertexBufferObject.Count / PerVertexSize : 0);
+    private uint PerVertexSize => Layout.Size * sizeof(float);
+
+    public ElementLayout Layout {
+        get => _layout;
+        init => SetAndOperation(() => _layout = value, ReconfigureLayout);
+    }
+
+    public VertexArrayObject(VertexBuffer vertexBufferObject)
     {
-        private uint Handle { get; }
-        private VertexBuffer VertexBufferObject { get; }
-        private IndexBuffer IndexBufferObject { get; }
+        Handle = Api.Gl.GenVertexArray();
+        VertexBufferObject = vertexBufferObject;
+    }
 
-        public uint IndexCount =>
-            _vertexOffset == 0 ? 0 : VertexBufferObject.Length / (sizeof(float) * _vertexOffset);
-        private uint _vertexOffset;
-        private uint _layoutSize;
-
-        public VertexArrayObject(VertexBuffer vbo, IndexBuffer ibo)
+    private unsafe void ReconfigureLayout()
+    {
+        Bind();
+        var offset = 0;
+        for (uint i = 0; i < Layout.Elements.Count; ++i)
         {
-            Handle = Api.Gl.GenVertexArray();
-            VertexBufferObject = vbo;
-            IndexBufferObject = ibo;
-        }
-        public void ConfigureLayout(params LayoutElement[] layoutElements)
-        {
-            Bind();
-            foreach (var element in layoutElements) VertexAttributePointer(element);
-        }
-        public void ConfigureLayout(params (int, uint)[] layoutElements)
-        {
-            Bind();
-            foreach (var (count, size) in layoutElements)
-                VertexAttributePointer(new LayoutElement(count, size));
-        }
-
-        private unsafe void VertexAttributePointer(LayoutElement element)
-        {
-            Api.Gl.VertexAttribPointer(_layoutSize, element.Count, VertexAttribPointerType.Float, false,
-                element.Size * sizeof(float), (void*) (_vertexOffset * sizeof(float)));
-            Api.Gl.EnableVertexAttribArray(_layoutSize);
-            _vertexOffset += (uint) element.Count;
-            _layoutSize += 1;
-        }
-
-        public void Bind()
-        {
-            Api.Gl.BindVertexArray(Handle);
-            VertexBufferObject.Bind();
-            IndexBufferObject.Bind();
-        }
-
-        public void Dispose()
-        {
-            IndexBufferObject.Dispose();
-            VertexBufferObject.Dispose();
-            Api.Gl.DeleteVertexArray(Handle);
+            var element = Layout.Elements[(int) i];
+            Api.Gl.VertexAttribPointer(i, element, VertexAttribPointerType.Float, false,
+                Layout.Size * sizeof(float), (void*) (offset * sizeof(float)));
+            Api.Gl.EnableVertexAttribArray(i);
+            offset += element;
         }
     }
 
-    [Serializable]
-    public struct LayoutElement
+    public void Bind()
     {
-        public int Count { get; }
-        public uint Size { get; }
-
-        public LayoutElement(int count, uint size)
-        {
-            Count = count;
-            Size = size;
-        }
+        Api.Gl.BindVertexArray(Handle);
+        VertexBufferObject.Bind();
+        IndexBufferObject?.Bind();
     }
+
+    public void Dispose()
+    {
+        IndexBufferObject?.Dispose();
+        VertexBufferObject.Dispose();
+        Api.Gl.DeleteVertexArray(Handle);
+    }
+
+    private ElementLayout _layout;
+}
+internal readonly struct ElementLayout
+{
+    public uint Size { get; }
+    public IReadOnlyList<int> Elements { get; }
+
+    public ElementLayout(uint size, IReadOnlyList<int> elements)
+    {
+        Size = size;
+        Elements = elements;
+    }
+}
 }

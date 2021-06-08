@@ -32,8 +32,8 @@ namespace Sokoban.primitives.components
 
         public new void Log(int depth = 0)
         {
-            $"Current Camera: <c19 {View}>".LogLine(depth);
-            $"Position:\t<c25 {Position}>".LogLine(depth + 2);
+            $"Current Camera: <c19 {View}|>".LogLine(depth);
+            $"Position:\t<c25 {Position}|>".LogLine(depth + 2);
             $"Left:\t{Left}".LogLine(depth + 2);
             $"Up:\t\t{Up}".LogLine(depth + 2);
             $"Forward:\t{Forward}".LogLine(depth + 2);

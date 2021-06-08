@@ -6,13 +6,12 @@ namespace Sokoban.engine.renderer
 {
     internal class VertexBuffer : BufferObject<float>
     {
-        public uint Length => DataCount;
-        public VertexBuffer(float[] vertices)
-            : base(vertices, BufferTargetARB.ArrayBuffer)
+        public VertexBuffer(IEnumerable<float> vertices)
+            : base(vertices.ToArray(), BufferTargetARB.ArrayBuffer)
         {
         }
         public VertexBuffer(IEnumerable<Vertex> vertices)
-            : base(vertices.SelectMany(v => v.ToFloats()).ToArray(), BufferTargetARB.ArrayBuffer)
+            : this(vertices.SelectMany(v => v.ToFloats()))
         {
         }
     }

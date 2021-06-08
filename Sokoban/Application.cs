@@ -2,12 +2,12 @@
 
 namespace Sokoban
 {
-    internal static class Application
+internal static class Application
+{
+    private static void Main()
     {
-        private static void Main()
-        {
-            Logger.InitializeLogging();
-            Game.Start();
-        }
+        Logger.InitializeLogging();
+        Game.Start();
     }
+}
 }

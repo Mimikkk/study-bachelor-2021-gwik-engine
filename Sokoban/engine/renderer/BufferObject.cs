@@ -3,12 +3,12 @@ using Silk.NET.OpenGL;
 
 namespace Sokoban.engine.renderer
 {
-    public abstract class BufferObject<TDataType> : IDisposable
-        where TDataType : unmanaged
+    public abstract class BufferObject<TDataType> : IDisposable where TDataType : unmanaged
     {
         private uint Handle { get; }
         private BufferTargetARB BufferType { get; }
-        protected readonly uint DataCount;
+        public readonly uint Count;
+        public readonly uint Size;
 
         protected unsafe BufferObject(Span<TDataType> data, BufferTargetARB bufferType)
         {
@@ -18,19 +18,14 @@ namespace Sokoban.engine.renderer
             Bind();
             fixed (void* d = data)
             {
-                DataCount = (uint) (data.Length * sizeof(TDataType));
+                Count = (uint) data.Length;
+                Size = (uint) (Count * sizeof(TDataType));
                 Api.Gl.BufferData(bufferType, (nuint) (data.Length * sizeof(TDataType)), d, BufferUsageARB.StaticDraw);
             }
         }
 
-        public void Bind()
-        {
-            Api.Gl.BindBuffer(BufferType, Handle);
-        }
+        public void Bind() { Api.Gl.BindBuffer(BufferType, Handle); }
 
-        public void Dispose()
-        {
-            Api.Gl.DeleteBuffer(Handle);
-        }
+        public void Dispose() { Api.Gl.DeleteBuffer(Handle); }
     }
 }

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
@@ -16,7 +19,6 @@ namespace Sokoban.utilities
         private static extern IntPtr GetStdHandle(int nStdHandle);
         [DllImport("kernel32.dll")] private static extern uint GetLastError();
 
-
         internal static void InitializeLogging()
         {
             var iStdOut = GetStdHandle(StdOutputHandle);
@@ -32,20 +34,18 @@ namespace Sokoban.utilities
             Console.ReadKey();
         }
 
-        private static readonly Regex ColorPattern = new(@"<c(\d+)\s*((.|\n)*?)>", RegexOptions.Multiline);
+        private static readonly Regex ColorPattern = new(@"<c(\d+)\s*((.|\n)*?)\|>", RegexOptions.Multiline);
         private static string ColorCode(object code = null)
             => $"\u001b[38;5;{code ?? DefaultColorCode}m";
         private static string ColorCode(Match match)
             => $"{ColorCode(match.Groups[1])}{match.Groups[2]}{ColorCode()}";
         private static string HandleColors(string str)
             => ColorPattern.Replace(str, ColorCode);
-        private static string HandleDepth(int depth) { return $"{new string(' ', depth)}{(depth > 0 ? "- " : "")}"; }
+        private static string HandleDepth(int depth)
+            => $"{new string(' ', depth)}{(depth > 0 ? "- " : "")}";
         public static void Log(this string str, int depth = default)
             => Console.Write($"{HandleDepth(depth)}{HandleColors(str)}");
         public static void LogLine(this string str, int depth = default)
-        {
-            str.Log(depth);
-            Console.WriteLine();
-        }
+            => $"{str}\n".Log(depth);
     }
 }

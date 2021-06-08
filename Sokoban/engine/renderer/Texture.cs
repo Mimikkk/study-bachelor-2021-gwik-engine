@@ -49,5 +49,7 @@ namespace Sokoban.engine.renderer
         {
             Api.Gl.DeleteTexture(Handle);
         }
+        
+        public static Texture Missing => new("Missing.png");
     }
 }

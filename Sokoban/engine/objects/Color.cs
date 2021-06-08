@@ -20,7 +20,7 @@
 
         public override string ToString()
         {
-            return $"Color(<c9 {R:F2}> <c10 {G:F2}> <c12 {B:F2}> <c15 {A:F2}>)";
+            return $"Color(<c9 {R:F2}|> <c10 {G:F2}|> <c12 {B:F2}|> <c15 {A:F2}|>)";
         }
     }
 }
